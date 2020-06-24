@@ -39,7 +39,6 @@ namespace :currency_fetcher do
   task :update_database => [:fetch_data, :environment] do
     scrapper_obj = Scrapper.new('https://coinmarketcap.com/')
     scraped = scrapper_obj.scrape
-    puts scraped
 
     Cryptocurrency.create(scraped);
   end

@@ -1,0 +1,22 @@
+<table style="width:100%">
+  <tr>
+    <th>ID</th>
+    <th>Name</th> 
+    <th>Market Cap</th>
+    <th>Price</th>
+    <th>Volume</th>
+    <th>Circulating Supply</th>
+    <th>Updated at</th>
+  </tr>
+  <% @currencies.each do |c|%>
+    <tr>
+      <td><%=c.id%></td>
+      <td><%=c.name%></td>
+      <td><%=c.market_cap%></td>
+      <td><%=c.price%></td>
+      <td><%=c.volume%></td>
+      <td><%=c.circulating_supply%></td>
+      <td><%=c.updated_at%></td>
+    </tr>
+  <%end%>
+</table>
