@@ -1,7 +1,7 @@
 namespace :currency_fetcher do
   desc "fetch the cyptocurrencies data from the external site"
   task :fetch_data do
-    require 'open-uri'
+    require 'httparty'
     require 'nokogiri'
     class Scrapper
       attr_reader :url
@@ -9,21 +9,23 @@ namespace :currency_fetcher do
       def initialize(url)
         @url = url
       end
+
+      def get_page_body
+        page_body = HTTParty.get(url).body
+      rescue
+        get_page_body
+      end
     
       def scrape
         details_arr = []
         scraped_pages = []
-        start = 1
-        while start <= 1
-          doc = Nokogiri::HTML(open("#{url}#{start}"))
-          doc.css('tr.cmc-table-row').each do |node|
-            scraped_pages << node
-          end
-          start += 1
+        doc = Nokogiri::HTML(get_page_body)
+        doc.css('tr.cmc-table-row').each do |node|
+          scraped_pages << node
         end
         scraped_pages.each do |node|
           details_hash = { name: node.css('td.cmc-table__cell--sort-by__name a').text,
-                           market_cap: node.css('td.cmc-table__cell--sort-by__market-cap div').text,
+                           market_cap: node.css('td.cmc-table__cell--sort-by__market-cap p').text,
                            price: node.css('td.cmc-table__cell--sort-by__price a').text,
                            volume: node.css('td.cmc-table__cell--sort-by__volume-24-h a').text,
                            circulating_supply: node.css('td.cmc-table__cell--sort-by__circulating-supply div').text,

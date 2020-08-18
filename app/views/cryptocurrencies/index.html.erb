@@ -8,9 +8,9 @@
     <th>Circulating Supply</th>
     <th>Updated at</th>
   </tr>
-  <% @currencies.each do |c|%>
+  <% @currencies.each_with_index do |c, i|%>
     <tr>
-      <td><%=c.id%></td>
+      <td><%=i + 1%></td>
       <td><%=c.name%></td>
       <td><%=c.market_cap%></td>
       <td><%=c.price%></td>
