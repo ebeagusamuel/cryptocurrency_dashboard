@@ -10,18 +10,22 @@ namespace :currency_fetcher do
         @url = url
       end
 
-      def get_page_body
-        page_body = HTTParty.get(url).body
+      def get_page_body(page)
+        page_body = HTTParty.get("#{url}/#{page}").body
       rescue
-        get_page_body
+        get_page_body(page)
       end
     
       def scrape
         details_arr = []
         scraped_pages = []
-        doc = Nokogiri::HTML(get_page_body)
-        doc.css('tr.cmc-table-row').each do |node|
-          scraped_pages << node
+        page = 1
+        while page <= 10
+          doc = Nokogiri::HTML(get_page_body(page))
+          doc.css('tr.cmc-table-row').each do |node|
+            scraped_pages << node
+          end
+          page += 1
         end
         scraped_pages.each do |node|
           details_hash = { name: node.css('td.cmc-table__cell--sort-by__name a').text,
